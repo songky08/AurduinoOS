@@ -7,7 +7,8 @@
 #ifndef BSPCONFIG_H_
 #define BSPCONFIG_H_
 
-#include "tc27xc/IfxPort_reg.h"
+#include "tc27xb/IfxPort_reg.h"
+#include "tc27xb/IfxAsclin_reg.h"
 
 #define HIGH 	1
 #define LOW	 	0

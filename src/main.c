@@ -5,10 +5,13 @@
  */
 
 #include "led.h"
+#include "spi.h"
 
 int main()
 {
-	pinMode(10, OUTPUT);
-	digitalWrite(10, HIGH);
+	//assume 50Mhz
+	serial_begin(9600);
+
+	serial_write("serial write!!");
 	return 0;
 }
