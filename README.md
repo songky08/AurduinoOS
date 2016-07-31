@@ -3,7 +3,9 @@ Aurduino OS
 
 #Compiler
 ========================
- + Free TriCore¢â Entry Tool Chain
+ + Free TriCore Entry Tool Chain
+ Link : [HIGHTEC compiler][HIGHTEC compiler link]
+[HIGHTEC compiler link]: http://free-entry-toolchain.hightec-rt.com/
 
 #Target ECU
 ========================
