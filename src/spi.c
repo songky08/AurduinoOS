@@ -9,7 +9,7 @@
 
 void serial_begin(int baud)
 {
-	/* Enables ASCLIN3output */
+	/* Enables ASCLIN3 output */
 	P15_IOCR4.B.PC7 = 0x12;
 	P15_OUT.B.P7 = 0;
 
@@ -60,19 +60,15 @@ void serial_begin(int baud)
 	ASCLIN3_CSR.B.CLKSEL = 1;
 	/* Defines interrupt flags */
 	ASCLIN3_FLAGSENABLE.B.TFLE = 1;
-
-
 }
-
 void serial_write(const char *str)
 {
 	int i;
 
 	for (i = 0; str[i]; i++)
 	{
-		while(!ASCLIN3_FLAGS.B.TFL);
+		while (!ASCLIN3_FLAGS.B.TFL);
 		ASCLIN3_FLAGSCLEAR.B.TFLC = 1;
-
 		ASCLIN3_TXDATA.B.DATA = str[i];
 	}
 }

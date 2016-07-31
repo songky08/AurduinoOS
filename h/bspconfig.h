@@ -7,12 +7,12 @@
 #ifndef BSPCONFIG_H_
 #define BSPCONFIG_H_
 
-#include "tc27xb/IfxPort_reg.h"
-#include "tc27xb/IfxAsclin_reg.h"
+#include <tc27xc/IfxPort_reg.h>
+#include <tc27xc/IfxAsclin_reg.h>
+#include <tc27xc/IfxCpu_reg.h>
+#include <tc27xc/IfxCpu_bf.h>
+#include <tc27xc/IfxScu_reg.h>
+#include <tc27xc/IfxScu_regdef.h>
 
-#define HIGH 	1
-#define LOW	 	0
-#define MAX_LED	54
-#define OUTPUT	0x10
 
 #endif /* BSPCONFIG_H_ */

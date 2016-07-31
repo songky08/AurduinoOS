@@ -3,7 +3,7 @@ Aurduino OS
 
 #Compiler
 ========================
- + freetoolchain 1.5.0
+ + Free TriCore¢â Entry Tool Chain
 
 #Target ECU
 ========================

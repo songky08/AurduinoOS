@@ -2,7 +2,7 @@
  * spi.h
  *
  *  Created on: 2016. 7. 22.
- *      Author: songky
+ *      Author: songky08@gmail.com
  */
 
 #ifndef SPI_H_

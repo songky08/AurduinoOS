@@ -7,6 +7,8 @@
 #ifndef LED_H_
 #define LED_H_
 
+#include "bspconfig.h"
+
 void pinMode (int pin, int mode);
 void digitalWrite(int pin, int sig);
 
