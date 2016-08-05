@@ -1,7 +1,12 @@
 .ude
+.map
+.sd3
 .htcproject
 .cproject
 .project
 *.swp
 iRAM
-iROM
+iROM/CORE0
+iROM/CORE1
+iROM/CORE2
+iROM/src
