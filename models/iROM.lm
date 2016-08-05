@@ -114,6 +114,9 @@
     <ObjectFile Name="src\crt0-tc2x.o"/>
     <ObjectFile Name="CORE0\main.o"/>
     <ObjectFile Name="src\system_tc2x.o"/>
+    <ObjectFile Name="src\cint_tc2x.o"/>
+    <ObjectFile Name="src\cinttab.o"/>
+    <ObjectFile Name="src\interrupts.o"/>
   </Files>
   <LocalAliases>
     <Alias Description="Alias for Code" Name="CODE" Region="TriBoard-TC275C.mdm#//@Memory.0/@Region.0"/>

@@ -2,7 +2,7 @@
  * main.c
  *
  *  Created on: 2016. 7. 30.
- *      Author: songky
+ *      Author: songky08@gmail.com
  */
 #include "system.h"
 #include "core.h"
