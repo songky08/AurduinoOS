@@ -8,7 +8,12 @@
 #ifndef SPI_H_
 #define SPI_H_
 
+#include <stdarg.h>
+
 void serial_begin(int baud);
-void serial_write(const char *str);
+int serial_write(char *fmt, ...);
+static int _cvt(unsigned long val, char *buf, long radix, char *digits);
+int usr_vsprintf(char *dest, const char *fmt, va_list ap);
+
 
 #endif /* SPI_H_ */
