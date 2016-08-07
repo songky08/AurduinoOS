@@ -15,6 +15,9 @@
 #include <tc27xc/IfxScu_regdef.h>
 #include <tc27xc/IfxStm_reg.h>
 #include <tc27xc/IfxStm_bf.h>
+#include <tc27xc/IfxGpt12_reg.h>
+#include <tc27xc/IfxInt_reg.h>
 
+#include "interrupts.h"
 
 #endif /* BSPCONFIG_H_ */
