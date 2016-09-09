@@ -7,18 +7,30 @@
 
 #include "usr_int.h"
 
-/* timer interrupt routine */
-static void isrSTM(int reload_value)
-{
-	/* set new compare value */
-	stm->CMP[0].U += (unsigned int)reload_value;
+extern void digitalWrite(int pin, int sig);
 
+void isrSTM0(void)
+{
 	//user code section
+	static int i = 0;
+	/* set new compare value */
+	stm->CMP[0].U += (unsigned int)cmp0_reload;
 }
 
-static void isrGPT()
+void isrSTM1(void)
 {
 	//user code section
+	static int i = 0;
+	/* set new compare value */
+	stm->CMP[1].U += (unsigned int)cmp1_reload;
+}
+
+static void isrGPT(void)
+{
+	//user code section
+	static int i = 0;
+	/* set new compare value */
+	digitalWrite(4, i = !i);
 }
 
 int initGPSR(int x, int y, void(*inthandler))
@@ -71,16 +83,11 @@ int initGPSR(int x, int y, void(*inthandler))
 		break;
 	}
 
-	InterruptInstall(GPSR_id, inthandler, GPSR_ISR_PRO, coordinates);
+	InterruptInstall(GPSR_id, inthandler, GPSR_ISR_PRIO, coordinates);
 
 	return 1;	//complete initializing
 }
 
-/* =============================================================
- * start timer processing
- * initSTM function parameter configures frequency of interrupts
- * unit : hz
- * =============================================================*/
 void initGPT(unsigned int hz)
 {
 	unsigned int frequency = SYSTEM_GetSysClock();
@@ -99,18 +106,37 @@ void initGPT(unsigned int hz)
 	/* Selects prescaler factor fgpt/8 */
 	gpt12->T3CON.B.BPS1 = 0;
 }
-void initSTM(unsigned int hz)
+
+void initSTM0(unsigned int hz)
 {
 	unsigned int frequency = SYSTEM_GetStmClock();
 
-	reload_value = frequency / hz;
+	cmp0_reload = frequency / hz;
 
-	InterruptInstall(SRC_ID_STM0SR0, isrSTM, STM_ISR_PRIO, (int)reload_value);
+	InterruptInstall(SRC_ID_STM0SR0, isrSTM0, STM0_ISR_PRIO, (int)cmp0_reload);
 
 	/* reset interrupt flag */
-	stm->ISCR.U = (IFX_STM_ISCR_CMP0IRR_MSK << IFX_STM_ISCR_CMP0IRR_OFF);
+	stm->ISCR.B.CMP0IRR = 1;
 	/* prepare compare register */
-	stm->CMP[0].U = stm->TIM0.U + reload_value;
+	stm->CMP[0].U = stm->TIM0.U + cmp0_reload;
 	stm->CMCON.B.MSIZE0 = 31;
 	stm->ICR.B.CMP0EN = 1;
+}
+
+void initSTM1(unsigned int hz)
+{
+	unsigned int frequency = SYSTEM_GetStmClock();
+
+	cmp1_reload = frequency / hz;
+
+	InterruptInstall(SRC_ID_STM0SR1, isrSTM1, STM1_ISR_PRIO, (int)cmp1_reload);
+
+	/* reset interrupt flag */
+	stm->ISCR.B.CMP1IRR = 1;
+	/* prepare compare register */
+	stm->CMP[1].U = stm->TIM0.U + cmp1_reload;
+	stm->CMCON.B.MSTART1 = 0;
+	stm->CMCON.B.MSIZE1 = 31;
+	stm->ICR.B.CMP1OS = 1;
+	stm->ICR.B.CMP1EN = 1;
 }
