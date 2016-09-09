@@ -9,6 +9,8 @@
 #include <machine/intrinsics.h>
 #include <machine/wdtcon.h>
 #include "cint.h"
+#include "usr_int.h"
+#include "task.h"
 
 #if defined(__TC29XX__)
 # ifdef TRIBOARD_TC29XA
@@ -66,7 +68,10 @@ typedef struct _Hnd_arg
 	int hnd_arg;
 } Hnd_arg;
 
-
+extern TMM tmm;
+extern int insert_rq(int tid);
+extern int get_current_tid();
+extern void schedule();
 /* This array holds the functions to be called when an interrupt occurs.  */
 
 extern _FARDATA Hnd_arg Cdisptab_CPU0[MAX_INTRS];
@@ -116,8 +121,19 @@ __asm (	"debug		# int 0\n"
     __asm (".align 3")
 
 DEFINE_INT(1);
-DEFINE_INT(2);
-DEFINE_INT(3);
+__asm (".global __interrupt_2");			\
+__asm ("__interrupt_2 :");				\
+__asm ("bisr 2");							\
+__asm ("j isrTask1");					\
+__asm (".align 3");
+
+__asm (".global __interrupt_3");			\
+__asm ("__interrupt_3 :");				\
+__asm ("bisr 3");							\
+__asm ("j isrTask2");					\
+__asm (".align 3");
+//DEFINE_INT(2);
+//DEFINE_INT(3);
 DEFINE_INT(4);
 DEFINE_INT(5);
 DEFINE_INT(6);
@@ -439,4 +455,33 @@ void isr_dispatcher(void)
 	unsigned int coreId = _mfcr(CPU_CORE_ID) & IFX_CPU_CORE_ID_CORE_ID_MSK;
 	int intno = _mfcr(CPU_ICR) & 0xFF;
 	(*Cdisptab[coreId][intno].hnd_handler)(Cdisptab[coreId][intno].hnd_arg);
+}
+
+void isrTask1(void) __attribute__ ((interrupt_handler));
+void isrTask1(void)
+{
+	//user code section
+	_disable();
+	__asm ("mov.aa %0, %%a10" : "=a"(tmm.tcb[get_current_tid()].a[10]));
+	__asm ("mov.aa %0, %%a11" : "=a"(tmm.tcb[get_current_tid()].a[11]));
+	isrSTM0();
+	insert_rq(0);
+	schedule();
+	_enable();
+	__asm ("ji %0" :: "a"(tmm.tcb[get_current_tid()].pc));
+
+}
+
+void isrTask2(void) __attribute__ ((interrupt_handler));
+void isrTask2(void)
+{
+	//user code section
+	_disable();
+	__asm ("mov.aa %0, %%a10" : "=a"(tmm.tcb[get_current_tid()].a[10]));
+	__asm ("mov.aa %0, %%a11" : "=a"(tmm.tcb[get_current_tid()].a[11]));
+	isrSTM1();
+	insert_rq(1);
+	schedule();
+	_enable();
+	__asm ("ji %0" :: "a"(tmm.tcb[get_current_tid()].pc));
 }
